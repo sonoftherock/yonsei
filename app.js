@@ -1,9 +1,7 @@
 var express = require("express");
 var bodyParser = require("body-parser");
 var request = require("request");
-var mongodb = require('mongodb');
 var functionSheet = require('./functionSheet');
-var cron = require('cron');
 var api = require('./apiCalls')
 var async = require('async');
 const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
@@ -12,7 +10,6 @@ const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 // var nlpapp = apiai("3d2a930932f6409e90ce7cddbe99c3fc");
 
 var app = express();
-var ObjectID = mongodb.ObjectID;
 
 app.use(bodyParser.json());
 
