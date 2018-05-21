@@ -93,11 +93,6 @@ app.post('/webhook', function (req, res) {
   }
 });
 
-var CronJob = cron.CronJob;
-new CronJob('00 25 23 * * 1-5', function() {
-    api.sendMessage({text: '시간이 다 됐어!'});
-}, null, true, 'America/New_York');
-
 // "시작하기" 버튼 처리 - 유저 등록
 function receivedPostback(event) {
   var senderID = event.sender.id;
@@ -125,14 +120,15 @@ function receivedPostback(event) {
             var first_name = bodyObj.first_name;
             var last_name = bodyObj.last_name;
             var gender = bodyObj.gender;
-            db.collection('users').findOne({"fbuid": senderID}, function (err, user){
-              if (user){
-                db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
-              }
-              else {
-                db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
-              }
-            });
+            // database
+            // db.collection('users').findOne({"fbuid": senderID}, function (err, user){
+            //   if (user){
+            //     db.collection('users').update({"fbuid": senderID}, {$set: {"first_name": first_name, "last_name": last_name, "gender": gender}})
+            //   }
+            //   else {
+            //     db.collection('users').insertOne({"fbuid": senderID, "first_name": first_name, "last_name": last_name, "gender": gender})
+            //   }
+            // });
             callback(null, first_name)
           },
           function (first_name, callback) {
@@ -144,12 +140,10 @@ function receivedPostback(event) {
     });
     }
     else {
-      db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
+      // db.collection('users').update({"fbuid": senderID}, {$set: {"messagePriority": payload}})
     }
 }
 
 app.listen(app.get('port'), function () {
     console.log('Node app is running on port', app.get('port'));
-    require('./database').init(app, config);
-    db = app.get('database');
 });
